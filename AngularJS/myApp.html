@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple app</title>
+    <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body>
+    <div ng-app="myApp">
+    	<h1>Hello {{name}}</h1>
+    </div>
+    <script type="text/javascript">
+    	angular.module('myApp', []).run(function($rootScope){
+    		$rootScope.name = "World";
+    	});
+    </script>
+</body>
+</html>
+
+<!-- 
+使用模块的好处：
+1> 保持全局命名空间的清洁；
+2> 编写测试代码更容易，并能保持其清洁，以便更容易找到互相隔离的功能；
+3> 易于在不同应用间复用代码；
+4> 使应用能够以任意顺序加载代码的各个部分 
+
+作用域scope：
+1、作用域是应用状态的基础，基于动态绑定，我们可以依赖视图在修改数据时立刻更新$scope，也可以依赖$scope在其发生变化时立刻重新渲染视图。 
+2、$rootScope是所有$scope对象的最上层。
+3、$scope对象在AngularJS中充当 “ 数据模型 ”，但是与传统的数据模型不一样，$scope并不负责处理和操作数据。它只是视图和 HTML 之间的桥梁，它是视图和控制器之间的胶水，为两者建立联系。
+
+我们可以在AngularJS应用的模板中使用多种标记：
+1、指令：将DOM元素增强为可复用的DOM组件的属性或元素。
+2、值绑定：模板语法 {{ }} 可以将表达式绑定到视图上。
+3、过滤器：可以在视图中使用函数，用来进行格式化。
+4、表单控件：用来检验用户输入的控件。
+-->
+

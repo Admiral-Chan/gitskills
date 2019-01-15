@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple app</title>
+    <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body>
+    <div ng-app="myApp">
+        <!-- controller的链接和按钮 -->
+    	<div ng-controller="FirstController">
+            <h4>The simplest adding machine ever</h4>
+            <button ng-click="add(1)" class="button">Add</button>
+            <a ng-click="subtract(1)" class="button alert">Subtract</a>
+            <h4>Current count:{{ counter }}</h4>
+        </div>
+        <!-- Controller设置对象属性 -->
+        <hr>
+        <div ng-controller="MyController">
+            <h1>{{person}}</h1>
+            and their name:
+            <h2>{{person.name}}</h2>
+        </div>
+
+        <!-- Controller的嵌套 （作用域包含作用域）-->
+        <hr>
+        <div ng-controller="ParentController">
+            <div ng-controller="ChildController">
+                <a ng-click="sayHello()">Say Hello</a>
+            </div>
+            {{person}}
+        </div>
+    </div>
+    <script type="text/javascript">
+    	var app = angular.module('myApp', []);
+        /*controller的链接和按钮*/
+        app.controller('FirstController', function($scope){
+            $scope.count = 0;
+            $scope.add = function(amount){
+                $scope.counter += amount;
+            };
+            $scope.subtract = function(amount){
+                $scope.counter -= amount;
+            };
+        });
+
+        /*Controller设置对象属性*/
+        app.controller('MyController', function($scope){
+            $scope.person = {
+                name: 'Ari Lerner'
+            };
+        });
+
+        /*Controller的嵌套*/
+        /*控制器应该尽可能保持短小精悍，而在控制器中进行DOM操作和数据操作则是一个不好的实践*/
+        app.controller('ParentController', function($scope){
+            $scope.person = {greeted: false};
+        });
+
+        app.controller('ChildController', function($scope){
+            $scope.sayHello = function(){
+                $scope.person.name = 'Ari Lerner';
+            };
+        });
+
+        
+    </script>
+</body>
+</html>
