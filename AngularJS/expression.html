@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Simple app</title>
+    <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body>
+    <div>
+    	<div ng-controller="myController">
+            <input ng-model="expr" type="text" placeholder="Enter an expression" />
+        </div>
+        <h2>{{parseValue}}</h2>
+    </div>
+    <script type="text/javascript">
+    	var app = angular.module('myApp', []);
+        app.controller();
+        
+    </script>
+</body>
+</html>
