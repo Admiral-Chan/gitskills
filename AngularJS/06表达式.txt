@@ -5,3 +5,12 @@
 2、如果表达式发生了TypeError和ReferenceError并不会被抛出异常；
 3、不允许使用任何流程控制功能（条件控制，例如if/else）；
 4、可以接受过滤器和过滤器链；
+
+
+$interpolate服务是一个可以接受三个参数的函数，其中第一个参数是必须：
+1、text（字符串）：一个包含字符插值标记的字符串；
+2、mustHaveExpression（布尔型）：如果将这个参数设为true，当传入的字符串中不含有表达式时会返回null。
+3、truetedContext（字符串）：AngularJS会对已经进行过字符插值操作的字符串通过$sec.getTrusted()方法进行严格的上下文转义。
+
+
+$watch函数会监视$scope上的某个属性。只要属性发生变化就会调用对应的函数，可以使用$watch函数在$scope上某个属性发生变化时直接运行一个自定义函数。

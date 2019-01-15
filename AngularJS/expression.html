@@ -15,9 +15,16 @@
     	var app = angular.module('myApp', []);
         app.controller('myController', function($scope, $parse){
             $scope.$watch('expr', function(newValue, oldValue, scope){
-
+                if (newValue != oldValue){
+                    //用该表达式设置parseFun
+                    var parseFun = $parse(newValue);
+                    //获取经过解析后表达式的值
+                    $scope.parsedValue = parseFun(scope);
+                }
             });
         });
+
+        
         
     </script>
 </body>
