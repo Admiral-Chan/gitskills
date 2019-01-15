@@ -13,7 +13,11 @@
     </div>
     <script type="text/javascript">
     	var app = angular.module('myApp', []);
-        app.controller();
+        app.controller('myController', function($scope, $parse){
+            $scope.$watch('expr', function(newValue, oldValue, scope){
+
+            });
+        });
         
     </script>
 </body>
