@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Simple app</title>
+    <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body>
+    <div>
+        <span style="color: red;">表达式：自定义的第一个指定</span>
+    	<div>
+            <my-directive></my-directive>
+        </div>
+
+        <hr>
+
+        <!-- 表达式 -->
+        <span style="color: red;">表达式：赋值给内置指令ng-init</span>
+        <h1 ng-init="greeting='Hello World'">
+            The greeting is: {{ greeting }}
+        </h1>
+
+        <hr>
+
+        <span style="color: red;">表达式：当前作用域介绍</span>
+        <p>We can access:{{ rootProperty }}</p>
+        <div ng-controller="ParentController">
+            <p>We can access:{{ rootProperty }} and {{ parentProperty }}</p>
+            <div ng-controller="ChildController">
+                <p> We can access: {{ rootProperty }} and {{ parentProperty }} and {{ childProperty }} </p>
+                <p>{{ fullSentenceFromChild }}</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <span style="color: blue;">表达式1：向指令中传递数据</span>
+        <input type="text" name="" ng-model="myUrl" />
+        <div>
+            <div my-cmcc 
+                 some-attr="{{ myUrl }}"
+                 my-link-text="Click me to go to Bing">
+                     
+            </div>
+        </div>
+
+        <hr>
+
+        <span style="color: red;">表达式2：向指令中传递数据222222222</span>
+        <div>
+            <label>Their URL field:</label>
+            <input type="text" ng-model="theirUrl">
+            <div my-piss some-attr="theirUrl" my-link-text="Click me to go to Google"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var app = angular.module('myApp', []);
+        /*
+        1、通过AngularJS模块API中的.directive()方法，我们可以通过传入一个字符串和一个函数来注册一个新的指令。其中字符串是这个指令的名字，指令名应该是驼峰命名风格的，函数应该返回一个对象；
+        2、directive()方法返回的对象中包含了用来定义和配置指令所需的方法和属性。
+        3、默认情况下，AngularJS将模板生成的HTML代码嵌套在自定义标签<my-directive>内部。
+            也可以向指令定义中添加一些新的设置：我们可以将自定义标签从生成的DOM中完全移除掉，并只留下由模板生成的链接。将replace设置为true就可以实现这个效果；
+        4、replace方法会用来自定义元素取代指令声明，而不是嵌套在其内部；
+        5、之前创建的指令中可以指定以元素(E)、属性(A)、类(C)或注释(M)的格式来调用指令：无论有多少中方式声明指令，我们坚持使用属性方式，因为它有比较好的跨浏览器兼容性：<div my-directive></div>
+            为了更加明确我们的意图，将restrict设置为字母A（代表attribute）：
+            restrict: 'A'
+            遵循这个约定的同时，也要注意每个浏览器的内置样式，以便决定指令模板在HTML中是嵌套在声明元素内，还是替换声明元素。
+        */
+    	
+        app.directive('myDirective', [function () {
+            return {
+                restrict: 'EAC',
+                /*link: function (scope, iElement, iAttrs) {
+                    
+                }*/
+                //replace: true,
+                template: '<a href="https://www.baidu.com">Click me to go to BaiDu</a>'
+            };
+        }])
+
+
+        /*
+        表达式
+        根据表达式 ng-init 放置的位置不同，当前作用域可以是AngularJS在应用启动时调用ng-app实例化的$rootScope，也可以是某个作用域，比如某个控制器的作用域。
+            1、用表达式来声明指令
+        注：
+            还有其他内置指令(比如ng-include和ng-view)也会创建新的子作用域，这意味着他们在被调用时行为和ng-controller类型。我们在构造自定义指令时也可以创建新的子作用域
+        */
+        app.run(function ($rootScope) {
+            //使用.run访问$rootScope
+            $rootScope.rootProperty = 'root scope';
+        })
+        .controller('ParentController', function ($scope) {
+            //使用.controller访问'ng-controller'内部的属性
+            //在DOM忽略的$scope中，根据当前控制器进行推断
+            $scope.parentProperty = 'parent scope';
+        })
+        .controller('ChildController', function ($scope) {
+            $scope.childProperty = 'child scope';
+            //同在DOM中一样，我们可以通过当前$scope直接访问原型中的任意属性
+            $scope.fullSentenceFromChild = 'Same $scope: We can access: ' + 
+                                            $scope.rootProperty + ' and ' +
+                                            $scope.parentProperty + ' and ' +
+                                            $scope.childProperty
+        });
+
+        /*
+        向指令中传递数据：
+        AngularJS允许通过创建新的子作用域或者隔离作用域来解决“共享状态”导致的问题
+            同之前在当前作用域介绍中国介绍的继承作用域（子作用域）不同，隔离作用域同当前DOM的作用域四完全分隔开的，为了给这个新的对象设置属性，我们需要显式地通过属性传递数据，同在JavaScript或Ruby中给方法传递参数类似
+        */
+        app.directive('myCmcc', [function () {
+            return {
+                restrict: 'A',
+                replace: true,
+                /*scope: {
+                    myUrl: '@',             //绑定策略
+                    myLinkText: '@'         //绑定策略
+                }*/
+                template: '<a href="{{ myUrl }}">{{ myLinkText }}</a>'
+            };
+        }]);
+
+
+        app.directive('myPiss', [function () {
+            return {
+                restrict: 'A',
+                replace: true,
+                scope: {
+                    myUrl: '=someAttr',     //经过了修改
+                    myLinkText: '@'
+                },
+                template: '<div><label>My Url Field:</label><input type="text" ng-model="myUrl" /><a href="{{myUrl}}">{{myLinkText}}</a></div>'
+            };
+        }])
+    </script>
+</body>
+</html>

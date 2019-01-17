@@ -1,0 +1,16 @@
+指令：
+
+指令本质上就是AngularJS扩展具有自定义功能的HTML元素的途径。
+
+1、HTML引导
+
+内置指令是打包在AngularJS内部的指令。所有内置指令的命名空间都使用ng作为前缀。为了防止命名空间冲突，不要在自定义指令前添加ng前缀。
+
+2、自己的第一个指令
+
+<my-directive></my-directive> ，如果我们创建了一个完整的HTML文档，其中包含了AngularJS，并且DOM中已经用ng-app指令标识出了应用的根元素，当AngularJS编译HTML时就会调用指令。
+
+注：声明指令本质上是在HTML中通过元素、属性、类或注释来添加功能。
+
+为了让AngularJS能够调用我们的指令，需要修改指令中的restrict设置。这个设置告诉AngularJS在编译HTM时用哪种格式来匹配指令定义。
+

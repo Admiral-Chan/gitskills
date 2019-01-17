@@ -31,7 +31,9 @@
             value(字符型)：结束符号的值。
         如果需要修改者两个符号的设置，需要在创建新模块时将$interpolateProvider注入进去。*/
         
-        
+        app.controller('myController', function ($scope) {
+            $scope.previewText = '04作用域的基本功能.txt';
+        })
     </script>
 </body>
 </html>

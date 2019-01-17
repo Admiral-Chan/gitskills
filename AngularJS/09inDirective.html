@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <title>Simple app</title>
+    <script src="https://cdn.staticfile.org/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body>
+    <div>
+        <!-- 写普通的HTML输入字段时，如果在元素标签上出现了disabled属性就会禁用这个输入字段，通过ng-disabled可以对是否出现属性进行绑定。
+        例如：下面的例子中按钮会一直禁用，直到用户在文本字段中输入内容 -->
+        <span style="color: blue;">内置指令：ng-disabled</span>
+    	<div>
+            <input type="text" ng-model="someProperty" placeholder="TypetoEnable" />
+            <button ng-model="button" ng-disabled="!someProperty" >AButton</button>
+        </div>
+
+        <hr>
+
+        <span style="color: red;">内置指令：禁用5秒</span>
+        <div>
+            <!-- 文本字段会被禁用5秒，知道$timeout中将isDisabled属性设置为true -->
+            <textarea ng-disabled="isDisabled">Wait5Seconds</textarea>
+        </div>
+
+        <hr>
+
+        <span style="color: blue;">内置指令：在指令中使用子作用域ng-app</span>
+        <div>
+            {{ somePropertys }}
+            <button ng-click="someAction()">Click me</button>
+        </div>
+
+        <hr>
+
+        <span style="color: red;">内置指令：在指令中使用子作用域ng-controller</span>
+        <!-- <div ng-controller="SomeController">
+            {{ someModel.somePropertys }}
+            <button ng-click="someAction()">Communicate</button>
+        </div> -->
+
+        <div ng-controller="SomeController">
+            {{ someBareValue }}
+            <button ng-click="someAction()">Communicate to child</button>
+            <div ng-controller="ChildController">
+                {{ someBareValue }}
+                <button ng-click="childAction()">Communicate to parent</button>
+            </div>
+        </div>
+        
+        <!-- <div ng-controller="SomeController">
+            {{ someModel.someValue }}
+            <button ng-click="someAction()">Communicate to child</button>
+            <div ng-controller="ChildController">
+                {{ someModel.someValue }}
+                <button ng-click="childAction()">Communicate to parent</button>
+            </div>
+        </div> -->
+
+    </div>
+    <script type="text/javascript">
+    	var app = angular.module('myApp', []);
+        app.run(function ($rootScope, $timeout) {
+            $rootScope.isDisabled = true;
+            $timeout(function() {
+                $rootScope.isDisabled = false;
+            }, 5000);
+        });
+
+
+        app.run(function($rootScope) {
+            $rootScope.somePropertys = 'Hello Computer';
+            $rootScope.someAction = function(){
+                $rootScope.somePropertys = 'Hello Human';
+            }
+        });
+
+
+        /*
+        $scope对象的职责是承载DOM中指令所共享的操作和模型。
+        1、操作指的是$scope上的标准JavaScript方法
+        2、模型指的是$scope上保存的包含瞬时状态数据的JavaScript对象，持久化状态的数据应该保存到服务中，服务的作用是处理模型的持久化
+        3、出于技术和架构方面的原因，绝对不要直接将控制器中的$scope赋值为值类型对象（字符串、布尔值或数字）。DOM中应该始终通过点操作符来访问数据。遵守这个规则将使你原理不可预期的麻烦。
+        4、控制器应该尽可能简单。虽然可以用控制器来组织所有功能，但是将业务逻辑移到服务和指令中是非常好的主意。
+        */
+        /*app.controller('SomeController',  function ($scope) {
+            //创建模型
+            $scope.someModel = {
+                //添加属性
+                somePropertys: 'hello 霓虹'
+            }
+
+            //设置$scope自身的操作
+            $scope.someAction = function () {
+                $scope.someModel.somePropertys = '你好！zqy!';
+            }
+        })*/
+        /*
+        注意：
+        这个例子和之前相比有两处不同：首先，我们使用了$rootScope的子作用域，它提供了一个干净的对象共我们操作。使用子作用域意味着其上的数据据模型和操作在应用的其他地方是无法访问的，只能被这个作用域内的指令及其子作用域。其次，显式声明了数据模型，我们说过，这非常重要，为了展示这为什么重要，看一下这个例子的变体。在已有的控制器中嵌套了第二个控制器，并且没有设置模型对象的属性：
+        */
+        app.controller('SomeController', function ($scope) {
+            //反模式，裸值
+            $scope.someBareValue = 'hello wq!';
+            //设置 $scope 本身的操作，这样没问题
+            $scope.someAction = function(){
+                //在SomeController和ChildController中设置{{ someBareValue }}
+                $scope.someBareValue = 'hello hunman, from parent!';
+            };
+        })
+        .controller('ChildController', function ($scope) {
+            $scope.childAction = function(){
+                //在ChildController中设置{{ SomeBareValue }}
+                $scope.someBareValue = 'hello hunman, from child';
+            }
+        })
+
+        /*如果将模型对象的某个属性设置为字符串，他会通过引用进行共享，因此在子$scope中修改属性也会修改父$scope中的这个属性，下面的例子展示了正确的做法*/
+        /*app.controller('SomeController', function ($scope) {
+            $scope.someModel = {
+                someValue: 'hello wq!'
+            }
+            $scope.someAction = function(){
+                $scope.someModel.someValue = 'hello hunman, from parent!';
+            };
+        })
+        .controller('ChildController', function ($scope) {
+            $scope.childAction = function(){
+                $scope.someModel.someValue = 'hello hunman, from child';
+            }
+        })*/
+        
+    </script>
+</body>
+</html>
