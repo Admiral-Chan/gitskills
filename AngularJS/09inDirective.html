@@ -56,6 +56,23 @@
             </div>
         </div> -->
 
+        <hr>
+
+        <!-- 
+        这个指令和ng-switch-when及on="propertyName"一起使用，可以在propertyName发生变化时渲染不同指令到视图中。
+        下面这个例子中，当person.name时Ari时，文本域下面的div会显示出来，并且这个人会获得胜利：
+            注：
+            在switch被调用之前我们用ng-switch-default来输出默认值
+         -->
+        <span style="color: blue;">内置指令：在指令中使用子作用域ng-switch</span>
+        <div>
+            <input type="text" ng-model="person.name" />
+            <div ng-switch on="person.name">
+                <p>And the winner is</p>
+                <h1 ng-switch-when="Ari">{{ person.name }}</h1>
+            </div>
+        </div>
+
     </div>
     <script type="text/javascript">
     	var app = angular.module('myApp', []);
@@ -128,7 +145,8 @@
                 $scope.someModel.someValue = 'hello hunman, from child';
             }
         })*/
-        
+        /*注：
+        虽然以上的特性是使用ng-controller时最重要的特性之一，但在使用任何会创建子作用域的指令时，如果将指令定义中的scope设置为true，这个特性也会带来负面影响。*/
     </script>
 </body>
 </html>

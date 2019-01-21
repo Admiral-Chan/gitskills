@@ -33,3 +33,25 @@
 	嵌套在ng-controller中的指令有访问新子$scope的权限，但是要牢记每个指令都应该遵守的和作用域相关规则。
 
 	JavaScript对象要么是值复制要么是引用复制。字符串、数字和布尔星变量是值复制。数字、对象和函数则是引用复制。
+
+3、ng-include
+	使用ng-include可以加载、编译并包含外部HTML片段到当前的应用中。模板的URL被限制在与应用文档相同的域和协议下，可以通过白名单或包装成被信任的值来突破限制。更进一步，需要考虑跨域资源共享（Cross-Origin Resource Sharing，CORS）和同源规则（Same Origin Policy）来确保模板可以在任何浏览器中正常加载。例如，所有浏览器都不能进行跨域的请求，部分浏览器也不能访问file://协议的资源。
+
+		在开发中，可以通过命令行命令chrome --allow-file-access-from-files来禁止CORS错误。只在紧急情况下使用这个方法。
+
+	使用ng-include时AngularJS会自动创建一个子作用域。如果想要使用某个特定的作用域，例如ControllerA的作用域，必须在同一个DOM元素上添加ng-controller="ControllerA"指令，这样当模板加载完成后，不会像往常一样从外部作用域继承并创建一个新的子作用域
+		如：
+		<div ng-include="/myTemplateName.html"
+			 ng-controller="MyController"
+			 ng-init="name='World'">
+			Hello {{ name }}
+		</div>
+
+4、ng-switch
+	这个指令和ng-switch-when及on="propertyName"一起使用，可以在propertyName发生变化时渲染不同指令到视图中。
+
+5、ng-view
+	ng-view指令用来设置将被路由管理和放置在HTML中的视图的位置。
+
+6、ng-if
+	使用ng-if指令可以完全根据表达式的值在DOM中生成或移除一个元素。如果赋值给ng-if的表达式的值时false，那对应的元素将会从DOM中移除，否则对应元素的一个克隆将被重新插入DOM中。
