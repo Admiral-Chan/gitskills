@@ -9,7 +9,14 @@
         }
         .even {
             background-color: red;
+        }
+        input.ng-invalid {
+            border: 1px solid red;
+        }
+        input.ng-valid {
+            border: 1px solid green;
         } 
+
     </style>
 </head>
 <body>
@@ -133,6 +140,40 @@
             </div>
         </div>
 
+        <hr>
+
+        <!-- 由于AngularJS中用来取代 <form> 的 ng-form 指令可以嵌套，并且外部表单在所有子表单都合法之前一直处于不合法状态，因此我们可以在动态生成子表单的同时使用表单验证功能。是的鱼与熊掌可以兼得 -->
+        <span style="color: blue;">内置指令：在指令中使用表单验证ng-form</span>
+        <div>
+            <form name="signup_form" ng-controller="FormController" ng-submit="submitForm()" novalidate>
+                <div ng-repeat="field in fields" ng-form="signup_form_input">
+                    <input type="text" 
+                        name="dynamic_input" 
+                        ng-required="field.isRequired" 
+                        ng-model="field.name"
+                        placeholder="{{filed.placeholder}}" />
+                    <div ng-show="signup_form_input.dynamic_input.$dirty && signup_form_input.dynamic_input.$invalid">
+                        <span class="error" ng-show="signup_form_input.dynamic_input.$error.required">The field is required.</span>
+                    </div>
+                </div>
+                <button type="submit" ng-disabled="signup_form.$invalid">Submit All</button>
+            </form>
+        </div>
+
+        <hr>
+        
+        <!-- ng-click用来指定一个元素被点击时调用的方法或表达式。 -->
+        <span style="color: red;">内置指令：在指令中使用子作用域ng-click</span>
+        <div>
+            <div ng-controller="CounterController">
+                <button ng-click="count = count + 1" ng-init="count=0">Increment</button>
+                count:{{ count }}
+                <button ng-click="decrement()">Decrement</button>
+            </div>
+        </div>
+
+        <hr>
+
     </div>
     <script type="text/javascript">
     	var app = angular.module('myApp', []);
@@ -225,6 +266,29 @@
             };
         });
 
+        app.controller('FormController', function ($scope) {
+            $scope.fields = [
+                {placeholder: 'Username', isRequired: true},
+                {placeholder: 'Password', isRequired: true},
+                {placeholder: 'Email(optional)', isRequired: false}
+            ];
+
+            $scope.submitForm = function(){
+                alert("it works!");
+            }
+        });
+
+
+        app.controller('CounterController', function ($scope) {
+            $scope.decrement = function(){
+                //alert($scope.count);
+                if ($scope.count <= 0) {
+                    alert('亲@数据已经没了，请重新添加');
+                }else {
+                    $scope.count = $scope.count - 1;
+                }
+            };
+        });
     </script>
 </body>
 </html>
