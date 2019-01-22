@@ -15,7 +15,11 @@
         }
         input.ng-valid {
             border: 1px solid green;
-        } 
+        }
+        .red {
+            background-color: red;
+        }
+
 
     </style>
 </head>
@@ -201,6 +205,18 @@
             </form>
         </div>
 
+        <hr>
+
+        <!-- 使用ng-class动态设置元素的类，方法是绑定一个代表所有需要添加的类的表达式。重复的类不会添加。当表达式发生变化，先前添加的类会被移除，新类会被添加 -->
+        <span style="color: blue;">内置指令：在指令中使用子作用域ng-class</span>
+        <div>
+            <div ng-controller="LotteryController">
+                <div ng-class="{red: x > 5}" ng-if="x > 5">You won!</div>
+                <button ng-click="x = generateNumber()" ng-init="x = 0">Draw Number</button>
+                <p>Number is:{{ x }}</p>
+            </div>
+        </div>
+
     </div>
     <script type="text/javascript">
     	var app = angular.module('myApp', []);
@@ -339,6 +355,12 @@
                     $scope.people.push({name: $scope.person.name});
                     $scope.person.name = '';
                 }
+            };
+        });
+
+        app.controller('LotteryController', function ($scope) {
+            $scope.generateNumber = function() {
+                return Math.floor((Math.random() * 10) + 1);
             };
         })
     </script>
